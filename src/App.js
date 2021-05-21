@@ -15,7 +15,8 @@ export default class App extends Component {
   }
   render() {
     const user = localStorage.getItem("user");
-    if (user && user === "admin") {
+    const rule = localStorage.getItem("rule");
+    if (user && rule === "admin") {
       return (
         <>
           <ToastContainer />

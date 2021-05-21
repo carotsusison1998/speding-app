@@ -18,16 +18,24 @@ export default class Login extends Component {
     })
   }
   handleSubmit = (e) => {
-    //   console.log(this.state);
-    axios.post('http://localhost:4000/api/signin', this.state)
+    // var url = "https://reqres.in/api/users";
+    axios.post('https://app-spending.herokuapp.com/users/login', this.state)
     .then(function (response) {
-        if(response.status === 200){
-          localStorage.setItem('user', response.data.data[0].username);
-          window.location.reload();
-        }
+      if(response.status === 200){
+        localStorage.setItem('_id', response.data.result._id);
+        localStorage.setItem('email', response.data.result.email);
+        localStorage.setItem('user', response.data.result.name);
+        localStorage.setItem('rule', response.data.result.rule);
+        window.location.reload();
+      }
     })
     .catch(function (error) {
-        console.log(error.response);
+      if (error.response) {
+        console.log("error.response", error.response);
+      } else if (error.request) {
+        console.log("error.request", error.request);
+      } else {
+      }
     });
   }
   render() {

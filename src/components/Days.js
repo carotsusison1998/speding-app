@@ -17,9 +17,9 @@ export default class Days extends Component {
   }
   componentDidMount() {
     axios
-      .get("http://localhost:4000/api/spending/get-expending")
+      .get("https://app-spending.herokuapp.com/days")
       .then((response) => {
-        this.setState({ data: response.data.data });
+        this.setState({ data: response.data.result });
       })
       .catch((error) => {
         console.log(error.response);
@@ -28,12 +28,13 @@ export default class Days extends Component {
   renderData = () => {
     if (this.state.data.length > 0) {
       const listItems = this.state.data.map((item, i) => (
-        <tr key={item.id}>
+        <tr key={item._id}>
           <td>{i + 1}</td>
           <td>
-            <Moment format="DD/MM/YYYY">{item.date}</Moment>
+            {/* <Moment format="DD/MM/YYYY">{item.name}</Moment> */}
+            {item.name}
           </td>
-          <td>{this.getDayofWeek(item.date)}</td>
+          <td>{this.getDayofWeek(item.name)}</td>
           <td>
             <NumberFormat
               value={item.total_price}
@@ -107,16 +108,21 @@ export default class Days extends Component {
     );
   };
   getDayofWeek = (date) => {
-    var d = new Date(date);
-    var weekday = new Array(7);
-    weekday[0] = "Chủ nhật";
-    weekday[1] = "Thứ hai";
-    weekday[2] = "Thứ ba";
-    weekday[3] = "Thứ tư";
-    weekday[4] = "Thứ năm";
-    weekday[5] = "Thứ sáu";
-    weekday[6] = "Thứ bảy";
-    return weekday[d.getDay()];
+    // var mydate = new Date(date).toISOString();
+  // console.log(mydate.toDateString());
+  console.log(moment(new Date('"'+date+'"')).format("YYYY/MM/DD"));
+    // var d = new Date(date);
+    // var weekday = new Array(7);
+    // weekday[0] = "Chủ nhật";
+    // weekday[1] = "Thứ hai";
+    // weekday[2] = "Thứ ba";
+    // weekday[3] = "Thứ tư";
+    // weekday[4] = "Thứ năm";
+    // weekday[5] = "Thứ sáu";
+    // weekday[6] = "Thứ bảy";
+    // return weekday[d.getDay()];
+    // console.log(date);
+    // console.log(d.toDateString());
   };
   renderButtonAddDay = () => {
     if (this.state.data.length > 0) {
