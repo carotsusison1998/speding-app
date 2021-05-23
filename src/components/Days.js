@@ -31,10 +31,10 @@ export default class Days extends Component {
         <tr key={item._id}>
           <td>{i + 1}</td>
           <td>
-            {/* <Moment format="DD/MM/YYYY">{item.name}</Moment> */}
-            {item.name}
+            {/* <Moment format="DD/MM/YYYY">{item.name_date}</Moment> */}
+            {item.name_date}
           </td>
-          <td>{this.getDayofWeek(item.name)}</td>
+          <td>{this.getDayofWeek(item.name_date)}</td>
           <td>
             <NumberFormat
               value={item.total_price}
@@ -48,7 +48,7 @@ export default class Days extends Component {
               className="btn btn-primary"
               data-toggle="modal"
               data-target="#show-spending-detail"
-              onClick={(e, id) => this.getSpendingDetail(e, item.id)}
+              onClick={(e, id) => this.getSpendingDetail(e, item._id)}
             >
               Chi tiết
             </button>
@@ -59,72 +59,79 @@ export default class Days extends Component {
     }
   };
   getSpendingDetail = async (e, id) => {
-    const param = { id: id };
-    axios
-      .post("http://localhost:4000/api/spending/get-expending-detail", param)
+    const param = { id_day: id };
+    await axios
+      .post("https://app-spending.herokuapp.com/days/get-day", param)
       .then((response) => {
-        this.setState({ dataDetail: response.data.data });
+        this.setState({ dataDetail: response.data.result });
       })
       .catch((error) => {
         console.log(error.response);
       });
   };
   renderSpendingDetail = () => {
-    return (
-      <>
-        <h4 className="mt-5">DANH SÁCH CHI TIÊU TRONG MỘT NGÀY</h4>
-        <table className="table table-dark table-striped">
-          <thead>
-            <tr>
-              <th>STT</th>
-              <th>Tên chi tiêu</th>
-              <th>Giá</th>
-              <th>Ngày nhập</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.dataDetail.map((item, i) => {
-              return (
-                <tr key={item.id}>
-                  <td>{i + 1}</td>
-                  <td>{item.name}</td>
-                  <td>
-                    <NumberFormat
-                      value={item.price}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                    />{" "}
-                    VND
-                  </td>
-                  <td>
-                    <Moment format="DD/MM/YYYY">{item.created_at}</Moment>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </>
-    );
+    if(this.state.dataDetail.length > 0){
+      return (
+        <>
+          <table className="table table-dark table-striped">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Tên chi tiêu</th>
+                <th>Giá</th>
+                <th>Ngày nhập</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.dataDetail.map((item, i) => {
+                return (
+                  <tr key={item._id}>
+                    <td>{i + 1}</td>
+                    <td>{item.name}</td>
+                    <td>
+                      <NumberFormat
+                        value={item.price}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                      />{" "}
+                      VND
+                    </td>
+                    <td>
+                      <Moment format="DD/MM/YYYY">{item.created_at}</Moment>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </>
+      );
+    }
   };
   getDayofWeek = (date) => {
-    // var mydate = new Date(date).toISOString();
-  // console.log(mydate.toDateString());
-  console.log(moment(new Date('"'+date+'"')).format("YYYY/MM/DD"));
-    // var d = new Date(date);
-    // var weekday = new Array(7);
-    // weekday[0] = "Chủ nhật";
-    // weekday[1] = "Thứ hai";
-    // weekday[2] = "Thứ ba";
-    // weekday[3] = "Thứ tư";
-    // weekday[4] = "Thứ năm";
-    // weekday[5] = "Thứ sáu";
-    // weekday[6] = "Thứ bảy";
-    // return weekday[d.getDay()];
-    // console.log(date);
-    // console.log(d.toDateString());
+    var dateString = date;
+    var dataSplit = dateString.split('/');
+    var dateConverted;
+    if (dataSplit[2].split(" ").length > 1) {
+        var hora = dataSplit[2].split(" ")[1].split(':');
+        dataSplit[2] = dataSplit[2].split(" ")[0];
+        dateConverted = new Date(dataSplit[2], dataSplit[1]-1, dataSplit[0], hora[0], hora[1]);
+    } else {
+        dateConverted = new Date(dataSplit[2], dataSplit[1] - 1, dataSplit[0]);
+    }
+    var d = new Date(dateConverted);
+    var weekday = new Array(7);
+    weekday[0] = "Chủ nhật";
+    weekday[1] = "Thứ hai";
+    weekday[2] = "Thứ ba";
+    weekday[3] = "Thứ tư";
+    weekday[4] = "Thứ năm";
+    weekday[5] = "Thứ sáu";
+    weekday[6] = "Thứ bảy";
+    return weekday[d.getDay()];
   };
   renderButtonAddDay = () => {
+    return;
     if (this.state.data.length > 0) {
       var time1 = moment(new Date()).format('YYYY-MM-DD');
       var time2 = moment(this.state.data[0].date).format('YYYY-MM-DD');
@@ -167,7 +174,7 @@ export default class Days extends Component {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title" id="modal-show-spending-detail">
-                  Modal title
+                DANH SÁCH CHI TIÊU TRONG MỘT NGÀY
                 </h5>
                 <button
                   type="button"
@@ -179,18 +186,6 @@ export default class Days extends Component {
                 </button>
               </div>
               <div className="modal-body">{this.renderSpendingDetail()}</div>
-              {/* <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button type="button" className="btn btn-primary">
-                  Save changes
-                </button>
-              </div> */}
             </div>
           </div>
         </div>

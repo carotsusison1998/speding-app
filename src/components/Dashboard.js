@@ -22,41 +22,46 @@ export default class Dashboard extends Component {
       [name]: value,
     });
   };
+  convertDate = (date) => {
+    const getDate = new Date(this.state.date);
+    const dateConvert = getDate.getDate() + "/"+ parseInt(getDate.getMonth()+1) +"/"+getDate.getFullYear();
+    return dateConvert;
+  }
   handleSubmit = (e) => {
     e.preventDefault();
-    if (Number(this.state.date) === 0) {
+    if (this.state.date === "" || this.state.name === "" || this.state.price === "" || this.state.description === "") {
+      toast("Sống vội vàng!!! Nhập đủ các ô nhé bạn trẻ");
       return;
     }
+    const id_user = localStorage.getItem("_id");
     const param = {
-      id_user: 1,
-      id_day: Number(this.state.date),
       name: this.state.name,
       price: this.state.price,
-      description: this.state.description,
+      note: this.state.description,
+      date: this.convertDate(this.state.date),
+      id_user: id_user,
     };
     axios
-      .post("http://localhost:4000/api/spending", param)
+      .post("https://app-spending.herokuapp.com/spendings", param)
       .then(function (response) {
-        if (response.status === 200) {
-          if (response.data.success) {
-            toast(response.data.message);
-            document.getElementById("spending-form").reset();
-          }
+        if (response.data.status === true) {
+          toast(response.data.message);
+          document.getElementById("spending-form").reset();
         }
       })
       .catch(function (error) {
-        console.log(error.response);
+        console.log("error.response", error.response);
       });
   };
   componentDidMount() {
-    axios
-      .get("http://localhost:4000/api/spending")
-      .then((response) => {
-        this.setState({ data: response.data.data });
-      })
-      .catch((error) => {
-        console.log(error.response);
-      });
+    // axios
+    //   .get("http://localhost:4000/api/spending")
+    //   .then((response) => {
+    //     this.setState({ data: response.data.data });
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.response);
+    //   });
   }
   renderDate = () => {
     if (this.state.data.length > 0) {
@@ -78,7 +83,7 @@ export default class Dashboard extends Component {
             <form id="spending-form">
               <div className="form-group">
                 <label htmlFor="exampleInputEmail1">Ngày chi tiêu</label>
-                <select
+                {/* <select
                   className="form-control"
                   placeholder="Nhập ngày"
                   name="date"
@@ -86,7 +91,13 @@ export default class Dashboard extends Component {
                 >
                   <option>vui lòng chọn</option>
                   {this.renderDate()}
-                </select>
+                </select> */}
+                <input
+                  type="date"
+                  className="form-control"
+                  name="date"
+                  onChange={this.isChangeText}
+                />
               </div>
               <div className="form-group">
                 <label htmlFor="exampleInputEmail1">Tên chi tiêu</label>
