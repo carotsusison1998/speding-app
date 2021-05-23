@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import NumberFormat from "react-number-format";
 import Moment from "react-moment";
-import moment from "moment";
 import "moment-timezone";
-import 'react-toastify/dist/ReactToastify.css';
-import { toast } from 'react-toastify';
 const axios = require("axios");
 
 export default class Days extends Component {
@@ -132,13 +129,6 @@ export default class Days extends Component {
   };
   renderButtonAddDay = () => {
     return;
-    if (this.state.data.length > 0) {
-      var time1 = moment(new Date()).format('YYYY-MM-DD');
-      var time2 = moment(this.state.data[0].date).format('YYYY-MM-DD');
-      if (time1 !== time2) {
-        return <button onClick={()=>{this.AddNewDay()}} className="btn btn-primary mb-2">Tạo ngày mới</button>;
-      }
-    }
   };
   AddNewDay = async () => {
     const param = {
@@ -191,7 +181,6 @@ export default class Days extends Component {
         </div>
         <div className="container">
           <h4 className="mt-5">DANH SÁCH CHI TIÊU THEO NGÀY</h4>
-          {this.renderButtonAddDay()}
           <table className="table table-dark table-striped">
             <thead>
               <tr>
