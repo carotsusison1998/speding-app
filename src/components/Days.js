@@ -69,7 +69,7 @@ export default class Days extends Component {
   renderSpendingDetail = () => {
     if(this.state.dataDetail.length > 0){
       return (
-        <>
+        <div style={{overflowX:"auto"}}>
           <table className="table table-dark table-striped">
             <thead>
               <tr>
@@ -101,7 +101,7 @@ export default class Days extends Component {
               })}
             </tbody>
           </table>
-        </>
+        </div>
       );
     }
   };
@@ -179,9 +179,9 @@ export default class Days extends Component {
             </div>
           </div>
         </div>
-        <div className="container">
-          <h4 className="mt-5">DANH SÁCH CHI TIÊU THEO NGÀY</h4>
-          <table className="table table-dark table-striped">
+        <h4 className="mt-5">DANH SÁCH CHI TIÊU THEO NGÀY</h4>
+        <div className="container" style={{overflowX:"auto"}}>
+          <table className="table table-dark table-striped"  style={{overflowX: 'auto'}}>
             <thead>
               <tr>
                 <th>STT</th>

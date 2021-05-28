@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "./css/App.css";
 import Days from "./components/Days";
+import Week from "./components/Week";
 
 export default class App extends Component {
   constructor(props) {
@@ -23,7 +24,7 @@ export default class App extends Component {
           <Router>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
               <Link to="/" className="navbar-brand">
-                  Dashboard
+                  Dashboards
                 </Link>
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -51,6 +52,9 @@ export default class App extends Component {
               </Route>
               <Route exact path="/days">
                 <Days />
+              </Route>
+              <Route exact path="/weeks">
+                <Week />
               </Route>
             </Switch>
           </Router>
