@@ -20,7 +20,7 @@ export default class App extends Component {
     const rule = localStorage.getItem("rule");
     if (user && rule === "admin") {
       return (
-        <>
+        <>git
           <ToastContainer />
           <Router>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
