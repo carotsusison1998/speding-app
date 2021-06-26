@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "./css/App.css";
 import Days from "./components/Days";
 import Week from "./components/Week";
+import EditSpending from "./components/EditSpending";
 
 export default class App extends Component {
   constructor(props) {
@@ -22,16 +23,16 @@ export default class App extends Component {
         <>
           <ToastContainer />
           <Router>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar navbar-expand-lg navbar-light bg-light">
               <Link to="/" className="navbar-brand">
                   Dashboards
                 </Link>
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+              <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
               </button>
-              <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                  <Link to="/home" className="nav-link">
+              <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div className="navbar-nav">
+                    <Link to="/home" className="nav-link">
                         Home
                       </Link>
                       <Link to="/months" className="nav-link">
@@ -56,6 +57,8 @@ export default class App extends Component {
               <Route exact path="/weeks">
                 <Week />
               </Route>
+              {/* <Route path="/days/edit-spending/:id" children={<EditSpending />} /> */}
+              <Route path="/days/edit-spending/:id" render={props => <EditSpending  {...this.props} {...props}/>}/>
             </Switch>
           </Router>
         </>

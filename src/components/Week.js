@@ -1,68 +1,23 @@
 import React, { Component } from 'react'
+const axios = require("axios");
 
 export default class Week extends Component {
+  async componentDidMount() {
+    const param = { _id: "60b2cf4d344b400022b262de" };
+    await axios
+      .post("https://app-spending.herokuapp.com/spendings/get-detail", param)
+      .then((response) => {
+        console.log(response);
+        // this.setState({ dataDetail: response.data.result });
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  }
+  
     render() {
         return (
-            <div style={{overflowX:"auto"}}>
-  <table>
-    <tr>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Points</th>
-      <th>Points</th>
-      <th>Points</th>
-      <th>Points</th>
-      <th>Points</th>
-      <th>Points</th>
-      <th>Points</th>
-      <th>Points</th>
-      <th>Points</th>
-      <th>Points</th>
-    </tr>
-    <tr>
-      <td>Jill</td>
-      <td>Smith</td>
-      <td>50</td>
-      <td>50</td>
-      <td>50</td>
-      <td>50</td>
-      <td>50</td>
-      <td>50</td>
-      <td>50</td>
-      <td>50</td>
-      <td>50</td>
-      <td>50</td>
-    </tr>
-    <tr>
-      <td>Eve</td>
-      <td>Jackson</td>
-      <td>94</td>
-      <td>94</td>
-      <td>94</td>
-      <td>94</td>
-      <td>94</td>
-      <td>94</td>
-      <td>94</td>
-      <td>94</td>
-      <td>94</td>
-      <td>94</td>
-    </tr>
-    <tr>
-      <td>Adam</td>
-      <td>Johnson</td>
-      <td>67</td>
-      <td>67</td>
-      <td>67</td>
-      <td>67</td>
-      <td>67</td>
-      <td>67</td>
-      <td>67</td>
-      <td>67</td>
-      <td>67</td>
-      <td>67</td>
-    </tr>
-  </table>
-</div>
+            <div>Hello</div>
         )
     }
 }

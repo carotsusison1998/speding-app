@@ -1,23 +1,36 @@
 import React, { Component } from "react";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import Spinner from '@bit/joshk.react-spinners-css.spinner';
+import { toast } from 'react-toastify';
 const axios = require("axios");
 
-
-export default class Dashboard extends Component {
+export default class EditSpending extends Component {
   constructor(props) {
     super(props);
-    let tempDate = new Date();
-    let date = tempDate.getFullYear()+ '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate();
     this.state = {
-      date: date,
-      name: "",
-      price: "",
-      description: "",
-      data: [],
-      isLoading: false
+        id: "",
+        name: "",
+        price: "",
+        description: "",
+        isLoading: false
     };
+  }
+  async componentDidMount() {
+    const { id } = this.props.match.params;
+    const param = { _id: id };
+    await axios
+      // .post("https://app-spending.herokuapp.com/spendings/get-detail", param)
+      .post("https://app-spending.herokuapp.com/spendings/get-detail", param)
+      .then((response) => {
+        this.setState({
+            id: response.data.result._id,
+            name: response.data.result.name,
+            price: response.data.result.price,
+            description: response.data.result.note,
+        })
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
   }
   isChangeText = (event) => {
     const name = event.target.name;
@@ -26,63 +39,45 @@ export default class Dashboard extends Component {
       [name]: value,
     });
   };
-  convertDate = (date) => {
-    const getDate = new Date(this.state.date);
-    const dateConvert = getDate.getDate() + "/"+ parseInt(getDate.getMonth()+1) +"/"+getDate.getFullYear();
-    return dateConvert;
-  }
+  loader = () => {
+    if (this.state.loader === true) {
+      return (
+        <div className="loader">
+          <Spinner color="#be97e8" />
+        </div>
+      );
+    }
+  };
   handleSubmit = async (e) => {
     e.preventDefault();
     this.setState({loader: true});
-    const id_user = localStorage.getItem("_id");
     const param = {
       name: this.state.name,
       price: this.state.price,
       note: this.state.description,
-      date: this.convertDate(this.state.date),
-      id_user: id_user,
+      _id: this.state.id,
     };
-      axios
-      .post("https://app-spending.herokuapp.com/spendings", param)
-      // .post("http://localhost:3100/spendings", param)
-      .then((response)=>{
-        if (response.data.status === true) {
-          setTimeout( async () =>{
-            await this.setState({loader: false})
-            toast("Thêm chi tiêu thành công");
-            document.getElementById("spending-form").reset();
-          }, 1000)
-        }
-      })
-      .catch((error)=>{
-          if(error.response.data.isJoi){
-          const err = error.response.data.details[0].message.replace(/"/g, "");
-          setTimeout( async () =>{
-            await this.setState({loader: false});
-            if(err) toast(err);
-          }, 1000)
-        }
-      });
+    axios
+    .put("https://app-spending.herokuapp.com/spendings", param)
+    // .put("http://localhost:3100/spendings", param)
+    .then((response)=>{
+      if (response.data.status === true) {
+        setTimeout( async () =>{
+          await this.setState({loader: false})
+          toast("Cập nhật chi tiêu thành công");
+        }, 1000)
+      }
+    })
+    .catch((error)=>{
+        if(error.response.data.isJoi){
+        const err = error.response.data.details[0].message.replace(/"/g, "");
+        setTimeout( async () =>{
+          await this.setState({loader: false});
+          if(err) toast(err);
+        }, 1000)
+      }
+    });
   };
-  renderDate = () => {
-    if (this.state.data.length > 0) {
-      const listItems = this.state.data.map((item) => (
-        <option key={item.id} value={item.id}>
-          {item.date}
-        </option>
-      ));
-      return <>{listItems}</>;
-    }
-  };
-  loader = () => {
-    if(this.state.loader === true){
-      return (
-        <div className="loader">
-          <Spinner color="#000000" />
-        </div>
-      )
-    }
-  }
   render() {
     return (
       <div className="container">
@@ -93,16 +88,6 @@ export default class Dashboard extends Component {
             <h4 className="text-center mt-5">NHẬP CHI TIÊU</h4>
             <form id="spending-form">
               <div className="form-group">
-                <label htmlFor="exampleInputEmail1">Ngày chi tiêu</label>
-                <input
-                  type="date"
-                  className="form-control"
-                  name="date"
-                  onChange={this.isChangeText}
-                  defaultValue={this.state.date}
-                />
-              </div>
-              <div className="form-group">
                 <label htmlFor="exampleInputEmail1">Tên chi tiêu</label>
                 <input
                   type="text"
@@ -110,6 +95,7 @@ export default class Dashboard extends Component {
                   placeholder="Tên chi tiêu"
                   name="name"
                   onChange={this.isChangeText}
+                  defaultValue={this.state.name}
                 />
               </div>
               <div className="form-group">
@@ -120,6 +106,7 @@ export default class Dashboard extends Component {
                   placeholder="Tổng chi tiêu"
                   name="price"
                   onChange={this.isChangeText}
+                  defaultValue={this.state.price}
                 />
               </div>
               <div className="form-group">
@@ -131,6 +118,7 @@ export default class Dashboard extends Component {
                   style={{ resize: "none" }}
                   name="description"
                   onChange={this.isChangeText}
+                  defaultValue={this.state.description}
                 ></textarea>
               </div>
               <button
