@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Spinner from '@bit/joshk.react-spinners-css.spinner';
 import { toast } from 'react-toastify';
 const axios = require("axios");
 
@@ -43,7 +42,6 @@ export default class EditSpending extends Component {
     if (this.state.loader === true) {
       return (
         <div className="loader">
-          <Spinner color="#be97e8" />
         </div>
       );
     }

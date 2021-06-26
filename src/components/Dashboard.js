@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Spinner from '@bit/joshk.react-spinners-css.spinner';
 const axios = require("axios");
 
 
@@ -78,7 +77,7 @@ export default class Dashboard extends Component {
     if(this.state.loader === true){
       return (
         <div className="loader">
-          <Spinner color="#000000" />
+          
         </div>
       )
     }

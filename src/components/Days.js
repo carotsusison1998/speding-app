@@ -3,7 +3,6 @@ import NumberFormat from "react-number-format";
 import Moment from "react-moment";
 import "moment-timezone";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Spinner from '@bit/joshk.react-spinners-css.spinner';
 import $ from 'jquery';
 
 const axios = require("axios");
@@ -24,7 +23,6 @@ export default class Days extends Component {
     if(this.state.loader === true){
       return (
         <div className="loader">
-          <Spinner color="#000000" />
         </div>
       )
     }
@@ -181,7 +179,7 @@ export default class Days extends Component {
     weekday[6] = "Thứ bảy";
     return weekday[d.getDay()];
   };
-  
+
   // renderButtonAddDay = () => {
   //   return;
   // };
