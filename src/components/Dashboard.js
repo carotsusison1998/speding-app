@@ -77,7 +77,7 @@ export default class Dashboard extends Component {
     if(this.state.loader === true){
       return (
         <div className="loader">
-          
+
         </div>
       )
     }
