@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const axios = require("axios");
 
-
 export default class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -41,8 +40,9 @@ export default class Dashboard extends Component {
       date: this.convertDate(this.state.date),
       id_user: id_user,
     };
+      var url = process.env.REACT_APP_API_URL+"/spendings";
       axios
-      .post("https://app-spending.herokuapp.com/spendings", param)
+      .post(url, param)
       // .post("http://localhost:3100/spendings", param)
       .then((response)=>{
         if (response.data.status === true) {

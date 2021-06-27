@@ -19,7 +19,8 @@ export default class Login extends Component {
   }
   handleSubmit = (e) => {
     // var url = "https://reqres.in/api/users";
-    axios.post('https://app-spending.herokuapp.com/users/login', this.state)
+    var url = process.env.REACT_APP_API_URL+"/users/login";
+    axios.post(url, this.state)
     .then(function (response) {
       if(response.status === 200){
         localStorage.setItem('_id', response.data.result._id);

@@ -30,9 +30,9 @@ export default class Days extends Component {
   }
   componentDidMount() {
     this.setState({loader: true});
+    var url = process.env.REACT_APP_API_URL+"/days";
     axios
-      .get("https://app-spending.herokuapp.com/days")
-      // .get("http://localhost:3100/days")
+      .get(url)
       .then((response) => {
         this.setState({ 
           data: response.data.result,
@@ -80,8 +80,9 @@ export default class Days extends Component {
   getSpendingDetail = async (e, id) => {
     this.setState({loader: true});
     const param = { id_day: id };
+    var url = process.env.REACT_APP_API_URL+"/days/get-day";
     await axios
-      .post("https://app-spending.herokuapp.com/days/get-day", param)
+      .post(url, param)
       // .post("http://localhost:3100/days/get-day", param)
       .then((response) => {
         this.setState({ 
@@ -97,8 +98,9 @@ export default class Days extends Component {
   };
   handleDeleteSpending = async (id) => {
     this.setState({loader: true})
+    var url = process.env.REACT_APP_API_URL+"/spendings";
     await axios
-      .delete("https://app-spending.herokuapp.com/spendings", {
+      .delete(url, {
         params: {
           id: id
         }
@@ -189,9 +191,9 @@ export default class Days extends Component {
       this.componentDidMount();
       return;
     }else{
+      var url = process.env.REACT_APP_API_URL+"/days/filter-month/";
       await axios
-      .get("https://app-spending.herokuapp.com/days/filter-month/"+e.target.value)
-      // .post("http://localhost:3100/days/get-day", param)
+      .get(url+e.target.value)
       .then((response) => {
         this.setState({ 
           data: response.data.result,

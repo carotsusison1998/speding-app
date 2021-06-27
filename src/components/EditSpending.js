@@ -17,9 +17,10 @@ export default class EditSpending extends Component {
     this.setState({loader: true});
     const { id } = this.props.match.params;
     const param = { _id: id };
+    var url = process.env.REACT_APP_API_URL+"/spendings/get-detail";
     await axios
       // .post("https://app-spending.herokuapp.com/spendings/get-detail", param)
-      .post("https://app-spending.herokuapp.com/spendings/get-detail", param)
+      .post(url, param)
       .then((response) => {
         this.setState({
             id: response.data.result._id,
@@ -57,8 +58,9 @@ export default class EditSpending extends Component {
       note: this.state.description,
       _id: this.state.id,
     };
+    var url = process.env.REACT_APP_API_URL+"/spendings";
     axios
-    .put("https://app-spending.herokuapp.com/spendings", param)
+    .put(url, param)
     // .put("http://localhost:3100/spendings", param)
     .then((response)=>{
       if (response.data.status === true) {
