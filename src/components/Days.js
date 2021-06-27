@@ -16,7 +16,8 @@ export default class Days extends Component {
       dataDetail: [],
       isLoading: false,
       name_day: "",
-      total_day: ""
+      total_day: "",
+      filter_month: ""
     };
   }
   loader = () => {
@@ -28,6 +29,7 @@ export default class Days extends Component {
     }
   }
   componentDidMount() {
+    this.setState({loader: true});
     axios
       .get("https://app-spending.herokuapp.com/days")
       // .get("http://localhost:3100/days")
@@ -36,6 +38,7 @@ export default class Days extends Component {
           data: response.data.result,
           total: response.data.total
         });
+        this.setState({loader: false});
       })
       .catch((error) => {
         console.log(error.response);
@@ -75,12 +78,12 @@ export default class Days extends Component {
     }
   };
   getSpendingDetail = async (e, id) => {
+    this.setState({loader: true});
     const param = { id_day: id };
     await axios
       .post("https://app-spending.herokuapp.com/days/get-day", param)
       // .post("http://localhost:3100/days/get-day", param)
       .then((response) => {
-        console.log(response.data.result_2);
         this.setState({ 
           dataDetail: response.data.result,
           name_date: response.data.result_2[0].name_date,
@@ -90,6 +93,7 @@ export default class Days extends Component {
       .catch((error) => {
         console.log(error.response);
       });
+      this.setState({loader: false});
   };
   handleDeleteSpending = async (id) => {
     this.setState({loader: true})
@@ -179,33 +183,32 @@ export default class Days extends Component {
     weekday[6] = "Thứ bảy";
     return weekday[d.getDay()];
   };
-
-  // renderButtonAddDay = () => {
-  //   return;
-  // };
-
-  // AddNewDay = async () => {
-  //   const param = {
-  //     id_user: 1,
-  //     date: new Date(),
-  //     total_price: 0
-  //   }
-  //   await axios
-  //     .post("http://localhost:4000/api/spending/create-day", param)
-  //     .then((response) => {
-  //       if (response.data.success) {
-  //         window.location.reload();
-  //       }
-
-  //     })
-  //     .catch((error) => {
-  //       console.log(error.response);
-  //     });
-  // }
+  filterOfMonth = async (e) => {
+    this.setState({loader: true})
+    if(e.target.value === "0"){
+      this.componentDidMount();
+      return;
+    }else{
+      await axios
+      .get("https://app-spending.herokuapp.com/days/filter-month/"+e.target.value)
+      // .post("http://localhost:3100/days/get-day", param)
+      .then((response) => {
+        this.setState({ 
+          data: response.data.result,
+          total: response.data.total
+        });
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+    }
+    await this.setState({loader: false})
+  }
 
   render() {
     return (
       <>
+        {this.loader()}
         <div
           className="modal fade"
           id="show-spending-detail"
@@ -243,12 +246,21 @@ export default class Days extends Component {
         </div>
         <div className="container">
           <h4 className="mt-5">DANH SÁCH CHI TIÊU THEO NGÀY</h4>
+          <p>
           Tổng: <NumberFormat
                         value={this.state.total}
                         displayType={"text"}
                         thousandSeparator={true}
                       />{" "}
                       VND
+          </p>
+          <div className="filter mb-3">
+            <select onChange={this.filterOfMonth} name="filter_month">
+              <option value="0">Chọn</option>
+              <option value="5-2021">tháng 5-2021</option>
+              <option value="6-2021">tháng 6-2021</option>
+            </select>
+          </div>
           <div style={{overflowX:"auto", height: "550px"}}>
             <table className="table table-dark table-striped"  style={{overflowX: 'auto'}}>
               <thead>

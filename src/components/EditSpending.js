@@ -14,6 +14,7 @@ export default class EditSpending extends Component {
     };
   }
   async componentDidMount() {
+    this.setState({loader: true});
     const { id } = this.props.match.params;
     const param = { _id: id };
     await axios
@@ -25,7 +26,8 @@ export default class EditSpending extends Component {
             name: response.data.result.name,
             price: response.data.result.price,
             description: response.data.result.note,
-        })
+        });
+        this.setState({loader: false});
       })
       .catch((error) => {
         console.log(error.response);
