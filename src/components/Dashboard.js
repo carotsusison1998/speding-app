@@ -18,12 +18,6 @@ export default class Dashboard extends Component {
       isLoading: false
     };
   }
-  componentWillMount(){
-    this.setState({loader: true});
-  }
-  componentDidMount(){
-    this.setState({loader: false});
-  }
   isChangeText = (event) => {
     const name = event.target.name;
     const value = event.target.value;
