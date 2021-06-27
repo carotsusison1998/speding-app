@@ -75,6 +75,8 @@ export default class Days extends Component {
         </tr>
       ));
       return <>{listItems}</>;
+    }else{
+      return (<tr><td colSpan="5">chưa tìm thấy dữ liệu...</td></tr>)
     }
   };
   getSpendingDetail = async (e, id) => {
@@ -259,8 +261,8 @@ export default class Days extends Component {
           <div className="filter mb-3">
             <select onChange={this.filterOfMonth} name="filter_month">
               <option value="0">Chọn</option>
-              <option value="5-2021">tháng 5-2021</option>
               <option value="6-2021">tháng 6-2021</option>
+              <option value="5-2021">tháng 5-2021</option>
             </select>
           </div>
           <div style={{overflowX:"auto", height: "550px"}}>

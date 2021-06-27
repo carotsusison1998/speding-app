@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "./css/App.css";
 import Days from "./components/Days";
-import Week from "./components/Week";
+import Chart from "./components/Chart";
 import EditSpending from "./components/EditSpending";
 
 export default class App extends Component {
@@ -35,11 +35,8 @@ export default class App extends Component {
                     <Link to="/home" className="nav-link">
                         Home
                       </Link>
-                      <Link to="/months" className="nav-link">
-                        Months
-                      </Link>
-                      <Link to="/weeks" className="nav-link">
-                        Weeks
+                      <Link to="/chart" className="nav-link">
+                        Chart
                       </Link>
                       <Link to="/days" className="nav-link">
                         Days
@@ -54,8 +51,8 @@ export default class App extends Component {
               <Route exact path="/days">
                 <Days />
               </Route>
-              <Route exact path="/weeks">
-                <Week />
+              <Route exact path="/chart">
+                <Chart />
               </Route>
               {/* <Route path="/days/edit-spending/:id" children={<EditSpending />} /> */}
               <Route path="/days/edit-spending/:id" render={props => <EditSpending  {...this.props} {...props}/>}/>
